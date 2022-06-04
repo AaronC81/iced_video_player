@@ -392,7 +392,7 @@ impl VideoPlayer {
     }
 
     /// Wrap the output of `frame_image` in an `Image` widget.
-    pub fn frame_view(&mut self) -> Image {
+    pub fn frame_view(&self) -> Image {
         Image::new(self.frame_image())
     }
 

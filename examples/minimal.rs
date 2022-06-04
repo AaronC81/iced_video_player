@@ -53,7 +53,7 @@ impl Application for App {
         String::from("Video Player")
     }
 
-    fn update(&mut self, message: Message, _: &mut iced::Clipboard) -> Command<Message> {
+    fn update(&mut self, message: Message) -> Command<Message> {
         match message {
             Message::TogglePause => {
                 self.video.set_paused(!self.video.paused());
