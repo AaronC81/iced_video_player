@@ -168,13 +168,21 @@ impl VideoPlayer {
 
         // extract resolution and framerate
         // TODO(jazzfool): maybe we want to extract some other information too?
-        let caps = pad.current_caps().ok_or(Error::Caps)?;
-        let s = caps.structure(0).ok_or(Error::Caps)?;
-        let width = s.get::<i32>("width").map_err(|_| Error::Caps)?;
-        let height = s.get::<i32>("height").map_err(|_| Error::Caps)?;
-        let framerate = s
-            .get::<gst::Fraction>("framerate")
-            .map_err(|_| Error::Caps)?;
+        let width;
+        let height;
+        let framerate;
+        if let Some(caps) = pad.current_caps() {
+            let s = caps.structure(0).ok_or(Error::Caps)?;
+            width = s.get::<i32>("width").map_err(|_| Error::Caps)?;
+            height = s.get::<i32>("height").map_err(|_| Error::Caps)?;
+            framerate = s
+                .get::<gst::Fraction>("framerate")
+                .map_err(|_| Error::Caps)?;
+        } else {
+            width = 0;
+            height = 0;
+            framerate = gst::Fraction::new(0, 1);
+        }
 
         let duration = if !live {
             std::time::Duration::from_nanos(
